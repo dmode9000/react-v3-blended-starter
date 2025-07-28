@@ -1,54 +1,144 @@
-# React + TypeScript + Vite
+Технічне завдання
+Створіть копію репозиторію (форк);
+Клонуйте репозиторій на ваш ПК/ноутбук
+Додайте upstream (оригінальний батьківський репозиторій) командою:
+git remote add upstream https://github.com/goitacademy/react-v3-blended-starter.git
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Завантажте усі гілки з upstream командою:
+git fetch upstream
 
-Currently, two official plugins are available:
+Створи локальну гілку blended-2 на основі гілки blended-2 батьківського репозиторія командою:
+git switch -c blended-2 upstream/blended-2
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+</aside>
 
-## Expanding the ESLint configuration
+Запуште стартові файли у свій форкнутий репозиторій (origin) командою:
+git push origin blended-2
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Встановіть залежності через npm i;
+Ознайомтеся зі структурою репозиторію;
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+ПОШУК ФОТОГРАФІЙ
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Реалізуйте застосунок для пошуку фотографій за ключовим словом за допомогою API Pexels. Застосунок повинен мати форму пошуку, галерею фотографій, модальне вікно для перегляду фото у великому розмірі, індикатор завантаження та повідомлення про помилки.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Прев'ю робочого застосунку:
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+Загальна інформація
+
+У вкладці Матеріали у вас є посилання на репозиторій, в якому вже є створений проєкт, в ньому присутні стилізовані компоненти. Вам потрібно доповнити логікою деякі із них, щоб застосунок запрацював (компоненти <App>, <Modal>,<Form>, <PhotosGallery>, <PhotosGalleryItem>). Для створення сітки використовуйте компоненти <Grid> та <GridItem>.
+Загальні типи, які використовуються в кількох компонентах, винесені в окремий файл (src/types/photo.ts). Типи та інтерфейси, які стосуються лише одного компонента, потрібно оголошувати безпосередньо у файлі цього компонента.
+Для типізації пропсів компонентів використовується interface.
+Усі події компонентів типізовані.
+Для виконання HTTP-запитів використовується бібліотека axios.
+
+Інструкція Pexels API
+
+Інформація нижче є для загального ознайомлення. Функція для виконання запитів реалізована і знаходиться в src/services/photos.ts.
+
+Для HTTP-запитів використовується публічний сервіс пошуку фотографій Pexels. Приклад HTTP-запиту.
+
+import axios from 'axios';
+
+const API_KEY = '563492ad6f9170000100000108dc2880626e4436b3634ce1cf6b4d74';
+axios.defaults.baseURL = 'https://api.pexels.com/v1/';
+axios.defaults.headers.common['Authorization'] = API_KEY;
+axios.defaults.params = {
+orientation: 'landscape'
+};
+
+Не забувайте, що чутливі данні не можна зберігати напряму у коді.
+Винесіть API_KEY до файлу .env.
+
+У відповіді від API приходить масив об'єктів, в яких тобі цікаві лише наступні властивості.
+
+id - унікальний ідентифікатор
+avg_color - колір фотографії,
+alt - опис фото,
+src - об'єкт з розмірами картинок, нам цікаві розміри large та original.
+
+Опис компоненту <Form/>
+
+Компонент Form відповідає за введення ключового слова пошуку. Приймає один проп onSubmit - функцію для виконання запиту на бекенд за пошуковим словом під час сабміту форми та опрацювання повязаним із цим станів.
+
+Валідація форми: виконати лише перевірку значення інпуту на пустоту, тобто пропс onSubmit викликати лише у випадку, якщо значення інпуту не порожнє.
+
+Готова структура компоненту:
+
+<form className={style.form}>
+  <input
+    className={style.input}
+    placeholder="What do you want to write?"
+    name="search"
+    autoFocus
+  />
+  
+  <button className={style.button} type="submit">
+    <FiSearch size="16px" />
+  </button>
+</form>
+
+Компонент <PhotosGallery/>
+
+Використайте компонент <PhotosGallery/> для відображення галереї фотографій на сторінці. Він має відображатись лише якщо в масиві фотографій є хоча б один елемент.
+
+Компонент має приймати масив об’єктів та функцію для відкриття модального вікна як пропс.
+
+Компонент має наступну структуру. Для створення списку потрібно використати універсальний компонент <Grid/> та <GridItem> (стилізовані елементи ul та li відповідно)
+
+<Grid>
+  {array.map(() => (
+    <GridItem>
+      <PhotosGalleryItem />
+    </GridItem>
+  ))}
+</Grid>
+
+Для створення одного елемента списку потрібно використати <PhotosGalleryItem>
+
+Компонент елемента списку із фотографією створює компонент наступної структури:
+
+  <div
+    className={styles.thumb}
+    style={{ backgroundColor: avg_color, borderColor: avg_color }}
+  >
+    <img src="" alt="" />
+  </div>
+
+Робота зі стейтом
+
+Для відображення галереї фотографій, потрібно оголосити обов’язковий стейт:
+
+photos - стан для зберігання масиву об’єктів з інформацією про фотографії
+При роботі з асинхронним кодом варто також опрацьовувати “службовий” стан isLoading, isError. Вони потрібні для того, щоб відображати той чи інший інтерфейс, як відповідь на дії користувача під час виконання асинхронних запитів.
+
+Опис компонента <Loader>
+
+Під час відправки запиту на Pexels необхідно відображати компонент <Loader/>
+
+<div className={style.backdrop}>spinner</div>
+
+Для відображення спінера можна використати бібліотеку react-spinners.
+
+Повідомлення про помилку
+
+Якщо запит завершився з помилкою, відображайте повідомлення про це. Для цього можна використати компонент <Text/>.
+
+Модальне вікно
+
+Під час натискання на фотографію галереї повинно відкриватися модальне вікно, яке відображатиме фотографію у великому форматі. Доповніть для цього компонент Modal. Він має використовуватись в компоненті App та отримувати вміст (<img src="" alt="" />) через children і пропсом функцію для закриття модального вікна.
+
+Компонент Modal, використовуючи createPortal, має створювати DOM-елемент наступної структури:
+
+<div className={css.backdrop} role="dialog" aria-modal="true">
+  <div className={css.modal}>
+    <button className={css.closeButton} aria-label="Close modal">
+      &times;
+    </button>
+		{/* children  */} 
+  </div>
+</div>
+
+Модальне вікно має закриватись при кліку на кнопку з хрестиком, натисканні на клавішу ESC та при кліку за межами модального вікна. За допомогою стилів забороніть скролінг тіла сторінки, поки модалка відкрита.
+
+Коли модалка закривається, потрібно обов’язково чистити все, що було змінено чи додано під час її відкриття. Це включає очищення стану обраного фільму, видалення слухачів подій для клавіші Escape та відновлення прокручування тіла сторінки.
