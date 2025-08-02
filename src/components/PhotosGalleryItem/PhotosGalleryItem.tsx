@@ -1,10 +1,26 @@
-import GridItem from "../GridItem/GridItem";
+// React
+import { useState } from "react";
 
+// Libraries
+import { PuffLoader } from "react-spinners";
+
+// Styles
 import styles from "./PhotosGalleryItem.module.css";
 
-export default function PhotosGalleryItem({ src, alt, avgColor, onClick }) {
+interface Props {
+  src: string;
+  alt: string;
+  avgColor: string;
+  onClick: () => void;
+}
+
+export default function PhotosGalleryItem({ src, alt, avgColor, onClick }: Props) {
+  const [isImgLoading, setIsImgLoading] = useState(true);
+  const handleImageLoad = () => {
+    setIsImgLoading(false);
+  };
+
   return (
-    // <GridItem>
     <>
       <div
         className={styles.thumb}
@@ -14,9 +30,13 @@ export default function PhotosGalleryItem({ src, alt, avgColor, onClick }) {
         }}
         onClick={onClick}
       >
-        <img src={src} alt={alt} />
+        {isImgLoading && (
+          <div className={styles.spinnerOverlay}>
+            <PuffLoader color="white" size={60} />
+          </div>
+        )}
+        <img src={src} alt={alt} onLoad={handleImageLoad} loading="lazy" />
       </div>
     </>
-    // </GridItem>
   );
 }

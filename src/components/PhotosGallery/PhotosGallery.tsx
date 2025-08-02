@@ -1,6 +1,12 @@
+// React
+import { memo } from "react";
+
+// Components
 import Grid from "../Grid/Grid";
 import GridItem from "../GridItem/GridItem";
 import PhotosGalleryItem from "../PhotosGalleryItem/PhotosGalleryItem";
+
+// Types
 import type { Photo } from "../../types/photo";
 
 interface PhotosGalleryProps {
@@ -8,7 +14,8 @@ interface PhotosGalleryProps {
   openModal: (src: string, alt: string) => void;
 }
 
-export default function PhotosGallery({ photos, openModal }: PhotosGalleryProps) {
+function PhotosGallery({ photos, openModal }: PhotosGalleryProps) {
+  console.log("PhotosGallery: рендериться");
   return (
     <Grid>
       {photos.map(({ id, src, alt, avg_color }) => (
@@ -19,3 +26,5 @@ export default function PhotosGallery({ photos, openModal }: PhotosGalleryProps)
     </Grid>
   );
 }
+
+export default memo(PhotosGallery);

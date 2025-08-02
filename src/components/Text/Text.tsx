@@ -1,3 +1,4 @@
+// Styles
 import style from "./Text.module.css";
 
 interface TextProps {

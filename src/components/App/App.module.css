@@ -1,3 +1,22 @@
 .app {
   padding: 0 16px;
 }
+
+/* Add these styles for the modal spinner */
+.modalContentWrapper {
+  position: relative;
+  /* Fixes potential extra space below the image */
+  line-height: 0;
+}
+
+.spinnerOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.3);
+}

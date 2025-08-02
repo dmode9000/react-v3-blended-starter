@@ -1,5 +1,4 @@
-import React from "react";
-
+// Styles
 import styled from "./Container.module.css";
 
 type ContainerProps = {

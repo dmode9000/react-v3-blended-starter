@@ -1,14 +1,19 @@
+// React
+import { memo } from "react";
+import { type FormEvent, useState } from "react";
+
+// Libraries
 import { FiSearch } from "react-icons/fi";
 import toast from "react-hot-toast";
 
+// Styles
 import style from "./Form.module.css";
-import { type FormEvent, useState } from "react";
 
 interface Props {
   onSubmit: (query: string) => void;
 }
 
-export default function Form({ onSubmit }: Props) {
+function Form({ onSubmit }: Props) {
   const [query, setQuery] = useState("");
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -25,6 +30,7 @@ export default function Form({ onSubmit }: Props) {
     setQuery(event.target.value);
   };
 
+  console.log("Form: рендериться");
   return (
     <form className={style.form} onSubmit={handleSubmit}>
       <input className={style.input} placeholder="What do you want to write?" name="search" autoFocus value={query} onChange={handleInputChange} />
@@ -35,3 +41,5 @@ export default function Form({ onSubmit }: Props) {
     </form>
   );
 }
+
+export default memo(Form);
