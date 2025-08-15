@@ -26,8 +26,9 @@ import css from "./App.module.css";
 export default function App() {
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isCreatePost, setIsCreatePost] = useState(false);
-  const [isEditPost, setIsEditPost] = useState(false);
+  const [modalContent, setModalContent] = useState<"create" | "edit" | null>(null);
+  // const [isCreatePost, setIsCreatePost] = useState(false);
+  // const [isEditPost, setIsEditPost] = useState(false);
   const [editedPost, setEditedPost] = useState<Post | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [inputValue, setInputValue] = useState("");
@@ -72,15 +73,20 @@ export default function App() {
 
   const handleEditPost = useCallback((post: Post) => {
     setEditedPost(post);
-    setIsEditPost(true);
+    setModalContent("edit");
+    setIsModalOpen(true);
+  }, []);
+
+  const handleCreatePost = useCallback(() => {
+    setModalContent("create");
+    setIsModalOpen(true);
   }, []);
 
   const handlePageChange = useCallback((selected: number) => setCurrentPage(selected), []);
-  const handleCreatePost = useCallback(() => setIsCreatePost(true), []);
   const openModal = useCallback(() => setIsModalOpen(true), []);
   const handleCloseModal = useCallback(() => {
-    setIsCreatePost(false);
-    setIsEditPost(false);
+    setIsModalOpen(false);
+    setModalContent(null);
   }, []);
 
   return (
@@ -89,7 +95,8 @@ export default function App() {
         {/* SearchBox component*/}
         <SearchBox onSearch={handleSearchBox} value={inputValue} />
 
-        {/* Pagination component*/}
+        {isLoading && <b>Loading posts...</b>}
+
         {totalPages > 1 && (
           <Pagination
             currentPage={currentPage}
@@ -103,20 +110,17 @@ export default function App() {
         </button>
       </header>
 
-      {isCreatePost && (
+      {isModalOpen && (
         <Modal onClose={handleCloseModal}>
-          <CreatePostForm onClose={handleCloseModal} />
-        </Modal>
-      )}
-
-      {isEditPost && editedPost && (
-        <Modal onClose={handleCloseModal}>
-          <EditPostForm
-            onCansel={handleCloseModal}
-            id={editedPost.id}
-            oldTitle={editedPost.title}
-            oldBody={editedPost.body}
-          />
+          {modalContent === "create" && <CreatePostForm onClose={handleCloseModal} />}
+          {modalContent === "edit" && editedPost && (
+            <EditPostForm
+              onCansel={handleCloseModal}
+              id={editedPost.id}
+              oldTitle={editedPost.title}
+              oldBody={editedPost.body}
+            />
+          )}
         </Modal>
       )}
 
