@@ -48,7 +48,7 @@ export const fetchPosts = async (props: FetchPostsProps): Promise<FetchPostsResp
 };
 
 // create
-type NewPostContent = Omit<Post, 'id'>;
+type NewPostContent = Omit<Post, 'id' | 'userId'>;
 export const createPost = async (newPost: NewPostContent): Promise<Post> => {
   // console.log('function run: createPost(' + newPost + ')');
   const response = await axios.post<Post>(API_ENDPOINTS.POSTS, newPost);
