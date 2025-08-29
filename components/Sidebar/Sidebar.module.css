@@ -1,0 +1,39 @@
+.menuContainer {
+  position: relative;
+  display: inline-block;
+  z-index: 1000;
+}
+
+.menuList {
+  display: flex;
+  width: 100%;
+  padding: 12px 0 12px 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.menuItem {
+  margin: 0;
+  width: 100%;
+}
+
+.menuLink {
+  color: #fff;
+  font-family: 'Open Sans';
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  padding: 4px 12px 4px 12px;
+  display: block;
+}
+
+.menuLink:hover {
+  background-color: #368a01;
+}
+
+.active {
+  background-color: #368a01;
+}

@@ -1,12 +1,15 @@
 'use client';
 
+// other libraries
 import * as Yup from 'yup';
 import { Field, Form, Formik, FormikHelpers, ErrorMessage } from 'formik';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+// api
 import { createPost, fetchUsers } from '@/lib/api';
-
-import css from './CreatePostForm.module.css';
+// types
 import { User } from '@/types/user';
+// styles
+import css from './CreatePostForm.module.css';
 
 const PostSchema = Yup.object().shape({
   title: Yup.string()

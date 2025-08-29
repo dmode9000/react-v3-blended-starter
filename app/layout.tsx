@@ -1,7 +1,8 @@
+// components
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
 import TanStackProvider from '@/components/TanStackProvider/TanStackProvider';
-
+// styles
 import 'modern-normalize';
 import './globals.css';
 

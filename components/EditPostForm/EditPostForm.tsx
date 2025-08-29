@@ -1,8 +1,10 @@
+// other libraries
 import * as Yup from 'yup';
 import { Field, Form, Formik, FormikHelpers, ErrorMessage } from 'formik';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+// api
 import { editPost } from '@/lib/api';
-
+// styles
 import css from './EditPostForm.module.css';
 
 const PostSchema = Yup.object().shape({
@@ -18,7 +20,7 @@ const PostSchema = Yup.object().shape({
 interface EditPostFormProps {
   onClose: () => void;
   initialValues: {
-    id: number;
+    id: string;
     title: string;
     body: string;
   };
@@ -26,7 +28,7 @@ interface EditPostFormProps {
 
 interface FormValues {
   title: string;
-  id: number;
+  id: string;
   body: string;
 }
 

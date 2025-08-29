@@ -4,57 +4,89 @@ import { User } from '@/types/user';
 
 axios.defaults.baseURL = 'https://jsonplaceholder.typicode.com';
 
-export type FetchPostsResponse = Post[];
+// API endpoints constants
+export const API_ENDPOINTS = {
+  POSTS: '/posts',
+  USERS: '/users',
+} as const;
 
-export const fetchPosts = async ({
-  searchText,
-  page,
-  userId,
-}: {
-  searchText: string;
-  page: number;
+// get
+interface FetchPostsProps {
+  searchText: string | undefined;
+  page?: number;
+  limit?: number;
   userId?: string;
-}): Promise<{ posts: Post[]; totalCount: number }> => {
-  const response = await axios.get<FetchPostsResponse>('/posts', {
+}
+
+interface FetchPostsResponse {
+  posts: Post[];
+  totalCount: number;
+  totalPages: number;
+}
+
+export const fetchPosts = async (props: FetchPostsProps): Promise<FetchPostsResponse> => {
+  const { searchText, page, limit = 10, userId } = props;
+
+  const response = await axios.get<Post[]>(API_ENDPOINTS.POSTS, {
     params: {
-      userId,
-      ...(searchText !== '' && { q: searchText }),
+      q: searchText,
       _page: page,
-      _limit: 8,
+      _limit: limit,
+      userId: userId,
     },
   });
-  const totalCount = Number(response.headers['x-total-count']);
-  return { posts: response.data, totalCount };
+
+  const posts = response.data;
+  const totalCountHeader = response.headers['x-total-count'] || '0';
+  const totalCount = parseInt(totalCountHeader);
+
+  return {
+    posts,
+    totalCount: totalCount,
+    totalPages: Math.ceil(totalCount / limit),
+  };
 };
 
-interface NewPostContent {
-  title: string;
-  body: string;
-}
-
-interface EditedPost {
-  id: number;
-  title: string;
-  body: string;
-}
-
-export const createPost = async (newPost: NewPostContent) => {
-  const response = await axios.post<Post>('/posts', newPost);
+// create
+type NewPostContent = Omit<Post, 'id'>;
+export const createPost = async (newPost: NewPostContent): Promise<Post> => {
+  // console.log('function run: createPost(' + newPost + ')');
+  const response = await axios.post<Post>(API_ENDPOINTS.POSTS, newPost);
   return response.data;
 };
 
-export const editPost = async (newDataPost: EditedPost) => {
-  const response = await axios.patch<Post>(`/posts/${newDataPost.id}`, newDataPost);
+// edit
+type EditedPost = Omit<Post, 'userId'>;
+export const editPost = async (newDataPost: EditedPost): Promise<Post> => {
+  // console.log('function run: editPost(' + newDataPost + ')');
+  const response = await axios.patch<Post>(`${API_ENDPOINTS.POSTS}/${newDataPost.id}`, newDataPost);
   return response.data;
 };
 
-export const deletePost = async (postId: number) => {
-  const response = await axios.delete<Post>(`/posts/${postId}`);
+// delete
+export const deletePost = async (postId: Post['id']): Promise<Post> => {
+  // console.log('function run: deletePost(' + postId + ')');
+  const response = await axios.delete<Post>(`${API_ENDPOINTS.POSTS}/${postId}`);
   return response.data;
 };
 
-export const fetchPostById = async () => {};
+// get single post
+export const fetchPostById = async (postId: Post['id']): Promise<Post> => {
+  // console.log('function run: fetchPostById(' + postId + ')');
+  const response = await axios.get<Post>(`${API_ENDPOINTS.POSTS}/${postId}`);
+  return response.data;
+};
 
-export const fetchUsers = async () => {};
+// get all users
+export const fetchUsers = async (): Promise<User[]> => {
+  // console.log('function run: fetchUsers()');
+  const response = await axios.get<User[]>(API_ENDPOINTS.USERS);
+  return response.data;
+};
 
-export const fetchUserById = async () => {};
+// get single user
+export const fetchUserById = async (userId: User['id']): Promise<User> => {
+  // console.log('function run: fetchUserById(' + userId + ')');
+  const response = await axios.get<User>(`${API_ENDPOINTS.USERS}/${userId}`);
+  return response.data;
+};

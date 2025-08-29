@@ -18,6 +18,11 @@ export default function Header() {
               </Link>
             </li>
             <li className={css.navigationItem}>
+              <Link className={css.navigationLink} href="/posts">
+                Posts
+              </Link>
+            </li>
+            <li className={css.navigationItem}>
               <TagsMenu />
             </li>
           </ul>
