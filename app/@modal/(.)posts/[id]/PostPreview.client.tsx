@@ -1,6 +1,5 @@
 'use client';
 // next & react
-import { useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 // other libraries
 import { useQuery } from '@tanstack/react-query';
@@ -29,14 +28,6 @@ export default function PostPreviewClient() {
     refetchOnMount: false,
   });
 
-  if (isLoadingPost) {
-    return <div className={css.content}>Loading post...</div>;
-  }
-
-  if (isPostError) {
-    return <div className={css.content}>Error: {postEror.message}</div>;
-  }
-
   const {
     data: user,
     isLoading: isLoadingUser,
@@ -47,6 +38,14 @@ export default function PostPreviewClient() {
     queryFn: () => fetchUserById(post?.userId as User['id']),
     refetchOnMount: false,
   });
+
+  if (isLoadingPost) {
+    return <div className={css.content}>Loading post...</div>;
+  }
+
+  if (isPostError) {
+    return <div className={css.content}>Error: {postEror.message}</div>;
+  }
 
   const userNameText = isLoadingUser
     ? 'Loading...'

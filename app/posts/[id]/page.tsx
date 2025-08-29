@@ -9,11 +9,11 @@ import { fetchPostById } from '@/lib/api';
 
 // metadata generation
 type Props = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const id = params.id;
+  const { id } = await params;
 
   try {
     const post = await fetchPostById(id);
@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: post.title,
       description: post.body.substring(0, 30) + '...',
     };
-  } catch (error) {
+  } catch {
     return {
       title: 'Post not found',
       description: 'This post could not be found.',

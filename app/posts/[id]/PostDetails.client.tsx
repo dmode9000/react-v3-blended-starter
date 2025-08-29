@@ -1,7 +1,6 @@
 'use client';
 
 // next & react
-import router from 'next/router';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 // other libraries
@@ -15,7 +14,10 @@ import { User } from '@/types/user';
 import { Post } from '@/types/post';
 
 export default function PostDetailsClient() {
-  const handleClickBack = () => {};
+  const router = useRouter();
+  const handleClickBack = () => {
+    router.back();
+  };
 
   const { id } = useParams();
 
@@ -29,16 +31,6 @@ export default function PostDetailsClient() {
     queryFn: () => fetchPostById(id as Post['id']),
   });
 
-  // Раннє повернення для стану завантаження
-  if (isLoadingPost) {
-    return <div className={css.content}>Loading post...</div>;
-  }
-
-  // Раннє повернення для стану помилки
-  if (isPostError) {
-    return <div className={css.content}>Error: {postEror.message}</div>;
-  }
-
   const {
     data: user,
     isLoading: isLoadingUser,
@@ -50,22 +42,25 @@ export default function PostDetailsClient() {
     enabled: post?.userId !== undefined,
   });
 
+  if (isLoadingPost) {
+    return <div className={css.content}>Loading post...</div>;
+  }
+
+  if (isPostError) {
+    return <div className={css.content}>Error: {postEror.message}</div>;
+  }
+
   const userNameText = isLoadingUser
     ? 'Loading...'
     : isUserError
     ? `Error: ${userError.message}`
     : user?.name;
 
-  useEffect(() => {
-    const fn = async () => {};
-    fn();
-  }, []);
-
   return (
     <>
       <div className={css.container}>
         <div className={css.item}>
-          <button className={css.backBtn} onClick={() => router.back()}>
+          <button className={css.backBtn} onClick={handleClickBack}>
             ← Back
           </button>
 

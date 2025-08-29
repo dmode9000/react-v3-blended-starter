@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: post.title,
       description: post.body.substring(0, 30) + '...',
     };
-  } catch (error) {
+  } catch {
     return {
       title: 'Post not found',
       description: 'This post could not be found.',
