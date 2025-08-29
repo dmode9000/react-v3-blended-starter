@@ -29,7 +29,7 @@ interface PostsClientProps {
   userId?: string;
 }
 
-export default function PostsFilteredClient({ initialData, userId }: PostsClientProps) {
+export default function PostsFilteredClient({ userId }: PostsClientProps) {
   const params = useParams<{ slug: string[] }>();
   userId = params.slug[0];
 

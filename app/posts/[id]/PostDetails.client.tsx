@@ -2,7 +2,6 @@
 
 // next & react
 import { useParams, useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 // other libraries
 import { useQuery } from '@tanstack/react-query';
 // api
